@@ -23,6 +23,10 @@ jobs:
     runs-on: ubuntu-latest
     #    runs-on: windows-latest
 
+    strategy:
+      matrix:
+        delay: [1, 2, 3, 4, 5]  # 定义不同的延迟时间
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.10
@@ -42,6 +46,13 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+            
+      - name: Set Random Delay
+        id: delay
+        run: |
+          echo "Delaying for ${{ matrix.delay }} min"
+          sleep ${{ matrix.delay }}m  # 使用 sleep 命令设置延迟时间
+
 
       - name: start run
         env:
